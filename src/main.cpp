@@ -1,6 +1,7 @@
 #include "main.h"
 #include "robot.cpp"
 #include "robotInit.h"
+#include <math.h>
 
 /**
  * A callback function for LLEMU's center button.
@@ -126,7 +127,7 @@ void opcontrol() {
 		double rightPower = (leftY - rightX * TURN_CONST);
 
 		// Normalizing speeds to max out at 1 while preserving ratio
-		double highPower = std::max(abs(leftPower), abs(rightPower));
+		double highPower = std::max(fabs(leftPower), fabs(rightPower));
 		leftPower = (leftPower/highPower) * SPEED_CONST;
 		rightPower = (rightPower/highPower) * SPEED_CONST;
 
