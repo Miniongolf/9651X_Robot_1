@@ -127,6 +127,7 @@ void opcontrol() {
 		double rightPower = (leftY - rightX * TURN_CONST);
 
 		// Normalizing speeds to max out at 1 while preserving ratio
+		// Use fabs instead of abs to preserve floating point precisino
 		double highPower = std::max(fabs(leftPower), fabs(rightPower));
 		leftPower = (leftPower/highPower) * SPEED_CONST;
 		rightPower = (rightPower/highPower) * SPEED_CONST;

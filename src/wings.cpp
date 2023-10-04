@@ -15,7 +15,8 @@ class Wings {
 
         // Returns whether or not each piston is extended
         bool getStatus() {
-            return {leftIsExtended, rightIsExtended};
+            bool statuses[2] = {leftIsExtended, rightIsExtended};
+            return statuses;
         }
 
         /*  Sets the position for pneumatics 
