@@ -1,4 +1,6 @@
 #include "main.h"
+#include "robot.cpp"
+#include "robotInit.h"
 
 /**
  * A callback function for LLEMU's center button.
@@ -6,13 +8,21 @@
  * When this callback is fired, it will toggle line 2 of the LCD text between
  * "I was pressed!" and nothing.
  */
+
 void on_center_button() {
+	ADIDigitalOut piston (LEFT_WING_PORT);
+
 	static bool pressed = false;
 	pressed = !pressed;
 	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
+		lcd::set_text(2, "I was pressed!");
+
+		piston.set_value(true);
+  		delay(1000);
+  		piston.set_value(false);
+
 	} else {
-		pros::lcd::clear_line(2);
+		lcd::clear_line(2);
 	}
 }
 
@@ -23,10 +33,33 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+	Robot robot = Robot();
+	ADIDigitalOut piston (LEFT_WING_PORT);
 
-	pros::lcd::register_btn1_cb(on_center_button);
+	robot.wings.setPosition(1);
+	delay(1500);
+	robot.wings.setPosition(-1, 1);
+	delay(1500);
+	robot.wings.setPosition(0, 1);
+	delay(1500);
+	robot.wings.setPosition(1, -1);
+	delay(1500);
+	robot.wings.setPosition(-1, 0);
+	delay(1500);
+	robot.wings.setPosition(-1);
+	delay(1500);
+
+	// while (true) {
+	// 	piston.set_value(true);
+	// 	delay(2000);
+	// 	piston.set_value(false);
+	// 	delay(2000);
+	// }
+
+	lcd::initialize();
+	lcd::set_text(1, "Hello PROS User!");
+
+	lcd::register_btn1_cb(on_center_button);
 }
 
 /**
@@ -74,20 +107,32 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
+	// Initialization
+	Controller master(CONTROLLER_MASTER);
+	Robot chassis = Robot();
+	Wings wings = Wings();
 
+	chassis.left.set_brake_modes(MOTOR_BRAKE_HOLD);
+	chassis.right.set_brake_modes(MOTOR_BRAKE_HOLD);
+
+	// Main loop
 	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
+		/** NOTE: denominator is 127.0 because of int division imprecisions
+			Changes range of inputs to -1 <= x <= 1 for normalization */
+		double leftY = master.get_analog(ANALOG_LEFT_Y)/127.0;
+		double rightX = master.get_analog(ANALOG_RIGHT_X)/127.0;
+		
+		double leftPower = (leftY + rightX * TURN_CONST);
+		double rightPower = (leftY - rightX * TURN_CONST);
 
-		left_mtr = left;
-		right_mtr = right;
+		// Normalizing speeds to max out at 1 while preserving ratio
+		double highPower = std::max(abs(leftPower), abs(rightPower));
+		leftPower = (leftPower/highPower) * SPEED_CONST;
+		rightPower = (rightPower/highPower) * SPEED_CONST;
 
-		pros::delay(20);
+		chassis.drive(leftPower, rightPower);
+
+		/** NOTE: all infinite loops must have a delay >= 2ms */
+		delay(20); 
 	}
 }
