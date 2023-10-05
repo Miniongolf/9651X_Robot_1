@@ -4,13 +4,11 @@
 /* #endregion speed multipliers */
 
 /* #region drivetrain motors */
-    #define LF_PORT 1
-    #define LM_PORT 2
-    #define LR_PORT 3
+    #define LF_PORT 12
+    #define LR_PORT 19
 
-    #define RF_PORT 11
-    #define RM_PORT 12
-    #define RR_PORT 13
+    #define RF_PORT 2
+    #define RR_PORT 6
 /* #endregion drivetrain motors */
 
 /* #region other motors */
