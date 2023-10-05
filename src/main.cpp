@@ -43,6 +43,7 @@ void initialize() {
 	piston.set_value(true);
 	delay(1500);
 	lf.move(100);
+	delay(2000);
 	// robot.wings.setPosition(1);
 	// delay(1500);
 	// robot.wings.setPosition(-1, 1);
