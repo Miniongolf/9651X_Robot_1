@@ -30,6 +30,4 @@ class Robot {
             left.move(leftPower*127);
             right.move(rightPower*127);
         }
-
-        
 };

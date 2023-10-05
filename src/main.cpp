@@ -12,6 +12,7 @@
 
 void on_center_button() {
 	ADIDigitalOut piston (LEFT_WING_PORT);
+	
 
 	static bool pressed = false;
 	pressed = !pressed;
@@ -36,6 +37,7 @@ void on_center_button() {
 void initialize() {
 	Robot robot = Robot();
 	ADIDigitalOut piston (LEFT_WING_PORT);
+	Controller master(CONTROLLER_MASTER);
 
 	robot.wings.setPosition(1);
 	delay(1500);
@@ -49,6 +51,16 @@ void initialize() {
 	delay(1500);
 	robot.wings.setPosition(-1);
 	delay(1500);
+
+	while (true) {
+		if (master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
+			robot.wings.setPosition(1, 0);
+		} else robot.wings.setPosition(-1, 0);
+
+		if (master.get_digital(E_CONTROLLER_DIGITAL_R1)) {
+			robot.wings.setPosition(0, 1);
+		} else robot.wings.setPosition(0, -1);
+	}
 
 	// while (true) {
 	// 	piston.set_value(true);
