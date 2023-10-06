@@ -1,5 +1,5 @@
 #include "main.h"
-#include "robot.cpp"
+#include "chassis.cpp"
 #include "robotInit.h"
 #include <math.h>
 
@@ -37,7 +37,7 @@ void on_center_button() {
 void initialize() {
 	// Robot robot = Robot();
 	ADIDigitalOut piston (LEFT_WING_PORT);
-	Controller master(CONTROLLER_MASTER);
+	Controller gamepad(CONTROLLER_MASTER);
 	Motor lf = Motor(12);
 
 	piston.set_value(true);
@@ -126,8 +126,8 @@ void autonomous() {}
  */
 void opcontrol() {
 	// Initialization
-	Controller master(CONTROLLER_MASTER);
-	Robot chassis = Robot();
+	Controller gamepad(CONTROLLER_MASTER);
+	Chassis chassis = Chassis();
 	Wings wings = Wings();
 
 	chassis.left.set_brake_modes(MOTOR_BRAKE_HOLD);
@@ -137,8 +137,8 @@ void opcontrol() {
 	while (true) {
 		/** NOTE: denominator is 127.0 because of int division imprecisions
 			Changes range of inputs to -1 <= x <= 1 for normalization */
-		double leftY = master.get_analog(ANALOG_LEFT_Y)/127.0;
-		double rightX = master.get_analog(ANALOG_RIGHT_X)/127.0;
+		double leftY = gamepad.get_analog(ANALOG_LEFT_Y)/127.0;
+		double rightX = gamepad.get_analog(ANALOG_RIGHT_X)/127.0;
 		
 		double leftPower = (leftY + rightX * TURN_CONST);
 		double rightPower = (leftY - rightX * TURN_CONST);
