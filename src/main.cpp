@@ -1,7 +1,10 @@
 #include "main.h"
-#include "chassis.cpp"
 #include "robotInit.h"
 #include <math.h>
+
+#include "gamepad.cpp"
+#include "chassis.cpp"
+#include "wings.cpp"
 
 /**
  * A callback function for LLEMU's center button.
