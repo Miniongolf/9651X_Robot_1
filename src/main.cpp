@@ -38,37 +38,19 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	// Robot robot = Robot();
 	ADIDigitalOut piston (LEFT_WING_PORT);
 	Controller gamepad(CONTROLLER_MASTER);
 	Motor lf = Motor(12);
 
-	piston.set_value(true);
-	delay(1500);
-	lf.move(100);
-	delay(2000);
-	// robot.wings.setPosition(1);
-	// delay(1500);
-	// robot.wings.setPosition(-1, 1);
-	// delay(1500);
-	// robot.wings.setPosition(0, 1);
-	// delay(1500);
-	// robot.wings.setPosition(1, -1);
-	// delay(1500);
-	// robot.wings.setPosition(-1, 0);
-	// delay(1500);
-	// robot.wings.setPosition(-1);
-	// delay(1500);
+	while (true) {
+		if (master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
+			wings.setPosition(1, 0);
+		} else wings.setPosition(-1, 0);
 
-	// while (true) {
-	// 	if (master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
-	// 		robot.wings.setPosition(1, 0);
-	// 	} else robot.wings.setPosition(-1, 0);
-
-	// 	if (master.get_digital(E_CONTROLLER_DIGITAL_R1)) {
-	// 		robot.wings.setPosition(0, 1);
-	// 	} else robot.wings.setPosition(0, -1);
-	// }
+		if (master.get_digital(E_CONTROLLER_DIGITAL_R1)) {
+			wings.setPosition(0, 1);
+		} else wings.setPosition(0, -1);
+	}
 
 	// while (true) {
 	// 	piston.set_value(true);
