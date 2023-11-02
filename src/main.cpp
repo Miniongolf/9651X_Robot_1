@@ -1,5 +1,6 @@
+
 #include "main.h"
-#include "robotInit.h"
+#include "robotInit.hpp"
 #include <math.h>
 
 #include "gamepad.cpp"
@@ -41,13 +42,14 @@ void initialize() {
 	ADIDigitalOut piston (LEFT_WING_PORT);
 	Controller gamepad(CONTROLLER_MASTER);
 	Motor lf = Motor(12);
+	Wings wings = Wings();
 
 	while (true) {
-		if (master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
+		if (gamepad.get_digital(E_CONTROLLER_DIGITAL_L1)) {
 			wings.setPosition(1, 0);
 		} else wings.setPosition(-1, 0);
 
-		if (master.get_digital(E_CONTROLLER_DIGITAL_R1)) {
+		if (gamepad.get_digital(E_CONTROLLER_DIGITAL_R1)) {
 			wings.setPosition(0, 1);
 		} else wings.setPosition(0, -1);
 	}

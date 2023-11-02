@@ -1,5 +1,5 @@
 #include "main.h"
-#include "robotInit.h"
+#include "robotInit.hpp"
 
 class Gamepad {
     private:
