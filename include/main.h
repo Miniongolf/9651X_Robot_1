@@ -50,7 +50,7 @@
  * concurrently! The okapi namespace will export all symbols inside the pros
  * namespace.
  */
-using namespace pros;
+// using namespace pros;
 // using namespace pros::literals;
 // using namespace okapi;
 
@@ -72,10 +72,20 @@ void opcontrol(void);
 #endif
 
 #ifdef __cplusplus
-/**
- * You can add C++-only headers here
- */
-//#include <iostream>
+
+#include <cmath>
+
+#include "subHeads/button.hpp"
+#include "subHeads/cata.hpp"
+#include "subHeads/chassis.hpp"
+#include "subHeads/gamepad.hpp"
+#include "subHeads/globals.hpp"
+#include "subHeads/odometry.hpp"
+#include "subHeads/pid.hpp"
+#include "subHeads/position.hpp"
+#include "subHeads/vision.hpp"
+#include "subHeads/wings.hpp"
+
 #endif
 
 #endif  // _PROS_MAIN_H_
